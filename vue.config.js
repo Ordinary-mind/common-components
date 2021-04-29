@@ -21,5 +21,6 @@ module.exports = {
             return options
           })
     },
-    productionSourceMap:false
+    productionSourceMap:false,
+    lintOnSave: false
   }

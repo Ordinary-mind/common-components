@@ -1,30 +1,67 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <custom-text text="hello lqn"></custom-text>
-    <custom-text text="真是个悲伤的故事"></custom-text>
-    <custom-list :list="list1"></custom-list>
+    <component
+      v-for="(item, index) in list"
+      :is="item.name"
+      :key="index"
+    ></component>
+    <div style="width:100%;height:2px;background:black;"></div>
+    <component
+      v-for="(item, index) in customList"
+      :is="item.name"
+      :key="'customList' + index"
+      :attrs="item.attrs"
+    ></component>
+
+    <button @click="clickFun">点我</button>
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
-import myComponents from '../packages/index'
-Vue.use(myComponents)
+import Vue from "vue";
+import componentsObj from "../packages/index";
+Vue.use(componentsObj);
 export default {
-  name: 'app',
-  data: function(){
+  name: "app",
+  data: function() {
     return {
-    name: "lqn",
-    list1: [{name: "aaaaaaaaaaa"},{name: "bbbbbbbbbbbbb"}]
-  }
-  }
-}
+      list: [],
+      customList: [
+        {
+          name: "classA1",
+          attrs: [
+            {
+              name: "aaa",
+              condition: "==",
+              value: "3",
+              realValue: "",
+              function: "console.log('条件成立')",
+            },
+          ],
+        },
+      ],
+    };
+  },
+  mounted() {
+    let arr = [];
+    Object.keys(componentsObj).forEach((element) => {
+      if (element != "install") {
+        arr.push(componentsObj[element]);
+      }
+    });
+    this.list = arr;
+  },
+  methods: {
+    clickFun() {
+      this.customList[0].attrs[0].realValue = "3";
+    },
+  },
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
