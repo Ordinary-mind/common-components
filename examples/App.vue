@@ -6,14 +6,14 @@
       :key="index"
     ></component>
     <div style="width:100%;height:2px;background:black;"></div>
-    <component
+    <!-- <component
       v-for="(item, index) in customList"
       :is="item.name"
       :key="'customList' + index"
-      :attrs="item.attrs"
-    ></component>
+      :attrs="item.attrs" :ref="item.name"
+    ></component> -->
 
-    <button @click="clickFun">点我</button>
+    <button @click="clickFun" ref="btn">点我</button>
   </div>
 </template>
 
@@ -54,7 +54,11 @@ export default {
   methods: {
     clickFun() {
       this.customList[0].attrs[0].realValue = "3";
-    },
+      this.$refs["classA1"][0].hello = function (){
+        console.log("I'm hello")
+      }
+      this.$refs["classA1"][0].hello();
+    }
   },
 };
 </script>
