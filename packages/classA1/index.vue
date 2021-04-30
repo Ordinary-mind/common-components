@@ -1,16 +1,23 @@
 <template>
-  <div>
-    <h1
-      id="hello"
+  <div style="user-select:none;">
+    <div style="display:inline-block;position:absolute;border:solid 1px red;" :style="{'left':left,'top':top}">
+        <span style="position:absolute;width:10px;height:10px;background:red;top:-5px;left:-5px;"></span>
+        <span style="position:absolute;width:10px;height:10px;background:red;top:-5px;right:-5px;"></span>
+        <span style="position:absolute;width:10px;height:10px;background:red;bottom:-5px;left:-5px;"></span>
+        <span style="position:absolute;width:10px;height:10px;background:red;bottom:-5px;right:-5px;"></span>
+        <span style="position:absolute;width:2px;height:35px;background: black;left:50%;top:-35px;"></span>
+        <h1
+      id="hello" style="margin:0;display:inline-block;"
       @mousedown="mousedown($event)"
-      @mouseup="mouseup($event)"
     >
       组件A1
     </h1>
+    </div>
     <div style="width:100%;height:200px;border:solid;" id="fffff"></div>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   name: "classA1",
   props: ["index", "js", "attrs"],
@@ -39,34 +46,34 @@ export default {
       deep: true,
       immediate: true,
     },
+    moveFlag(e){
+    },
+    moveCoordinate(e){
+        if(this.$store.state.moveFlag){
+            this.left = e.split(",")[0] - this.offsetX + "px";
+            this.top = e.split(",")[1] - this.offsetY + "px";
+        }
+    }
+  },
+  computed:{
+      ...mapState({
+          moveFlag: state => state.moveFlag,
+          moveCoordinate: state => state.moveCoordinate
+      })
+  },
+  data(){
+      return {
+          left: 0,
+          top: 0,
+          moveObj: null
+      }
   },
   methods: {
-    ondrag(ev) {
-      ev.dataTransfer.setData("Text", ev.target.id);
-    },
     mousedown(ev) {
-        console.log(ev)
-        document.onmousemove = function (e) {
-            console.log(e)
-            // ev.target.style.position = "absolute";
-            // ev.target.style.left = e.clientX - e.movementX + "px";
-            // ev.target.style.top = e.clientY - e.movementY + "px";
-        }
-    },
-    mouseup(ev){
-    document.onmousemove = null;
-        document.onmouseup = null;
-    },
-    drop_handler(ev) {
-      ev.preventDefault();
-      // Get the id of the target and add the moved element to the target's DOM
-      var data = ev.dataTransfer.getData("Text");
-      console.log(ev.dataTransfer);
-
-      document
-        .getElementById("fffff")
-        .appendChild(document.getElementById("hello"));
-    },
+        this.$store.commit("moveFlag", true);
+        this.offsetX = ev.offsetX;
+        this.offsetY = ev.offsetY;
+    }
   },
 };
 </script>

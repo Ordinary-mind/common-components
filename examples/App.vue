@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @mouseup="mouseup" @mousemove="mousemove">
     <component
       v-for="(item, index) in list"
       :is="item.name"
@@ -58,6 +58,12 @@ export default {
         console.log("I'm hello")
       }
       this.$refs["classA1"][0].hello();
+    },
+    mouseup(){
+      this.$store.commit("moveFlag",false)
+    },
+    mousemove(ev){
+      this.$store.commit("moveCoordinate",`${ev.clientX},${ev.clientY}`);
     }
   },
 };
